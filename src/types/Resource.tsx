@@ -8,4 +8,5 @@ export interface ResourceData {
     release_year: string;
     duration_minutes: string;
     platform: string;
+    
 }
