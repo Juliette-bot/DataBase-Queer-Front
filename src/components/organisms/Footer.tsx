@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
           {/* About Section */}
           <div className="col-span-1 md:col-span-2">
             <h2 className="text-2xl font-bold mb-4 text-action">
-              Queer Database
+              Out Together
             </h2>
             <p className="text-gray-300 mb-4">
               Une plateforme collaborative pour partager et découvrir des ressources 

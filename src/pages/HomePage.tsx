@@ -7,7 +7,7 @@ export const HomePage: React.FC = () => {
     <div className="container mx-auto px-4 py-12">
       <div className="max-w-4xl mx-auto text-center">
         <h1 className="text-5xl font-bold text-content-primary mb-6">
-          Bienvenue sur Queer Database
+          Bienvenue sur Out Together
         </h1>
         <p className="text-xl text-content-secondary mb-8">
           Une plateforme collaborative pour partager et découvrir des ressources 

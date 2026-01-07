@@ -19,7 +19,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Logo / Brand */}
           <Link to="/" className="flex items-center">
             <h1 className="text-2xl font-bold text-action hover:text-action-hover transition-colors">
-              Queer Database
+              Out Together
             </h1>
           </Link>
 

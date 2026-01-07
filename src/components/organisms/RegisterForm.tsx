@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type React from 'react';
 import { FormField } from '../molecules/FromField';
 import { Button } from '../atoms/Button';
-import { authService } from '../../services/api';
+import { authService } from '../../services/AuthApi';
 
 export const RegisterForm: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -108,7 +108,7 @@ export const RegisterForm: React.FC = () => {
             />
 
             <FormField
-                label="Nom de famille"
+                label="Nom"
                 name="lastName"
                 type="text"
                 value={formData.lastName}

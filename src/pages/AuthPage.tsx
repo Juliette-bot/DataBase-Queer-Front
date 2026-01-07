@@ -1,7 +1,7 @@
 // src/pages/AuthPage.tsx
 import { useState } from 'react';
 import type React from 'react';
-import { LoginForm } from '../components/organisms/LginFrom';
+import { LoginForm } from '../components/organisms/LoginFrom';
 import { RegisterForm } from '../components/organisms/RegisterForm';
 import { Button } from '../components/atoms/Button';
 

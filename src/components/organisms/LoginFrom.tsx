@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type React from 'react';
 import { FormField } from '../molecules/FromField';
 import { Button } from '../atoms/Button';
-import { authService } from '../../services/api';
+import { authService } from '../../services/AuthApi';
 
 export const LoginForm: React.FC = () => {
     const [formData, setFormData] = useState({
