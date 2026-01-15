@@ -1,21 +1,21 @@
 // src/services/api.ts
 const API_BASE_URL = 'http://localhost:8080';
 
-// Gestion du token
+// token avec services 4
 export const tokenService = {
-  getToken: (): string | null => {
+  getToken: (): string | null => { //recup
     return localStorage.getItem('authToken');
   },
 
-  setToken: (token: string): void => {
+  setToken: (token: string): void => { //envoi
     localStorage.setItem('authToken', token);
   },
 
-  removeToken: (): void => {
+  removeToken: (): void => { //sup
     localStorage.removeItem('authToken');
   },
 
-  isAuthenticated: (): boolean => {
+  isAuthenticated: (): boolean => { //verif si existe
     return !!localStorage.getItem('authToken');
   }
 };

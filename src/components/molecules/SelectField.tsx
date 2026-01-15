@@ -1,14 +1,15 @@
 import type React from "react";
-import { Input } from '../atoms/Input';
+import { Select } from '../atoms/Select';
 import { Label } from '../atoms/Label';
 import { ErrorMessage } from '../atoms/ErrorMessage';
-import type { FormFieldProps } from "../../types/FormTypes";
+import type { SelectFieldProps } from "../../types/FormTypes";
 
 
-export const FormField: React.FC<FormFieldProps> = ({ 
+
+export const SelectField: React.FC<SelectFieldProps> = ({ 
     label,
     name,
-    type = 'text',
+    options=[],
     error,
     required = false,
     value,
@@ -19,10 +20,10 @@ export const FormField: React.FC<FormFieldProps> = ({
             <Label htmlFor={name} required={required}>
                 {label}
             </Label>
-            <Input
+            <Select
                 id={name}
                 name={name}
-                type={type}
+                options={options}
                 value={value}
                 onChange={onChange}
                 hasError={!!error}
