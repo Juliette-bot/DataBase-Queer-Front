@@ -1,5 +1,5 @@
+import type { ResourceData } from "../types/ResourceTypes";
 import { fetchWithAuth } from "./AuthApi";
-import type { ResourceData } from '../types/Resource';
 
 
 export const AddResourceService = {
@@ -10,4 +10,39 @@ export const AddResourceService = {
         });
 
         return await response.json();
-    }}
+    }
+}
+
+export const GetMediaService = {
+    getAll: async () => {
+        const response = await fetchWithAuth('/api/media');
+        return await response.json();
+    }
+}
+
+export const GetCategoryService = {
+    getAll: async () => {
+        const response = await fetchWithAuth('/api/category');
+        return await response.json();
+    },
+
+    getByMediaId: async (mediaId: string) => {
+        const response = await fetchWithAuth(`/api/media/${mediaId}/category`);
+        //                                    
+        return await response.json();
+    }
+}
+
+export const GetSubCategoryService = {
+    getAll: async () => {
+        const response = await fetchWithAuth('/api/subCategory');
+        //                                                   
+        return await response.json();
+    },
+
+    getByCategoryId: async (categoryId: string) => {
+        const response = await fetchWithAuth(`/api/category/${categoryId}/subCategory`);
+        //                                    
+        return await response.json();
+    }
+}

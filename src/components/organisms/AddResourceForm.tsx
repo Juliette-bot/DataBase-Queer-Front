@@ -1,13 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type React from 'react';
 import { FormField } from '../molecules/FromField';
+import { SelectField } from '../molecules/SelectField';
 import { Button } from '../atoms/Button';
-import type { ResourceData } from '../../types/Resource';  
-import { AddResourceService } from '../../services/Api';  
+import type { ResourceData } from '../../types/ResourceTypes';
+import type { SelectOption } from '../../types/FormTypes';
+import { AddResourceService, GetMediaService, GetCategoryService, GetSubCategoryService } from '../../services/Api';
 
 
 export const AddResourceForm: React.FC = () => {
-    const [formData, setFormData] = useState<ResourceData>({  // on met le type resource ici
+    const [formData, setFormData] = useState<ResourceData>({
+        media: '',
+        category: '',
+        subCategory: '',
         name: '',
         description: '',
         url: '',
@@ -18,13 +23,80 @@ export const AddResourceForm: React.FC = () => {
         platform: '',
     });
 
-    const [errors, setErrors] = useState<Partial<Record<keyof ResourceData, string>>>({});  // ← Utilise ResourceData
+    const [errors, setErrors] = useState<Partial<Record<keyof ResourceData, string>>>({});
     const [isLoading, setIsLoading] = useState(false);
+    const [mediaOptions, setMediaOptions] = useState<SelectOption[]>([]);
+    const [categoryOptions, setCategoryOptions] = useState<SelectOption[]>([]);
+    const [subCategoryOptions, setSubCategoryOptions] = useState<SelectOption[]>([]);
+
+    useEffect(() => {
+        const fetchMedia = async () => {
+            try {
+                const data = await GetMediaService.getAll();
+                console.log('Données médias reçues:', data);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const options = data.map((media: any) => ({
+                    value: media.id.toString(),
+                    label: media.type
+                }));
+                setMediaOptions(options);
+            } catch (error) {
+                console.error('Erreur chargement médias:', error);
+            }
+        };
+        fetchMedia();
+    }, []);
+
+    
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const data = await GetCategoryService.getAll();
+                console.log('Données catégories reçues:', data);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const options = data.map((category: any) => ({
+                    value: category.id.toString(),
+                    label: category.name
+                }));
+                 console.log('Options catégories transformées:', options);
+                setCategoryOptions(options);
+            } catch (error) {
+                console.error('Erreur chargement catégories:', error);
+            }
+        };
+        fetchCategories();
+    }, []);
+
+    useEffect(() => {
+        const fetchSubCategories = async () => {
+            try {
+                const data = await GetSubCategoryService.getAll();
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const options = data.map((subCategory: any) => ({
+                    value: subCategory.id.toString(),
+                    label: subCategory.name
+                }));
+                setSubCategoryOptions(options);
+            } catch (error) {
+                console.error('Erreur chargement sous-catégories:', error);
+            }
+        };
+        fetchSubCategories();
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
-        
+
+        if (errors[name as keyof ResourceData]) {
+            setErrors(prev => ({ ...prev, [name]: undefined }));
+        }
+    };
+
+    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+
         if (errors[name as keyof ResourceData]) {
             setErrors(prev => ({ ...prev, [name]: undefined }));
         }
@@ -52,12 +124,14 @@ export const AddResourceForm: React.FC = () => {
 
         setIsLoading(true);
         try {
-            // j'appel mon api addresource
             await AddResourceService.addResource(formData);
-            
+
             alert('Ressource ajoutée avec succès !');
-            
+
             setFormData({
+                media: '',
+                category: '',
+                subCategory: '',
                 name: '',
                 description: '',
                 url: '',
@@ -81,9 +155,34 @@ export const AddResourceForm: React.FC = () => {
                 Ajouter une ressource
             </h2>
 
+            <SelectField
+                label='Cette ressource se trouve dans :'
+                name='media'
+                value={formData.media}
+                onChange={handleSelectChange}
+                options={mediaOptions}
+            />
+
+            <SelectField
+                label='On pourrait la ranger dans la catégorie :'
+                name='category'
+                value={formData.category}
+                onChange={handleSelectChange}
+                options={categoryOptions}
+            />
+
+            <SelectField
+                label='On pourrait la ranger dans la sous-catégorie :'
+                name='subCategory'
+                value={formData.subCategory}
+                onChange={handleSelectChange}
+                options={subCategoryOptions}
+            />
+
             <FormField
                 label="Nom de la ressource"
                 name="name"
+                type='text'
                 value={formData.name}
                 onChange={handleChange}
                 error={errors.name}
@@ -93,6 +192,7 @@ export const AddResourceForm: React.FC = () => {
             <FormField
                 label="Description"
                 name="description"
+                type='text'
                 value={formData.description}
                 onChange={handleChange}
                 error={errors.description}
@@ -121,6 +221,7 @@ export const AddResourceForm: React.FC = () => {
             <FormField
                 label="Créateur/Créatrice"
                 name="creator"
+                type='text'
                 value={formData.creator}
                 onChange={handleChange}
                 error={errors.creator}
@@ -147,14 +248,15 @@ export const AddResourceForm: React.FC = () => {
             <FormField
                 label="Plateforme"
                 name="platform"
+                type='text'
                 value={formData.platform}
                 onChange={handleChange}
                 error={errors.platform}
             />
 
-            <Button 
-                type="submit" 
-                variant="action" 
+            <Button
+                type="submit"
+                variant="action"
                 className="w-full mt-6"
                 disabled={isLoading}
             >
