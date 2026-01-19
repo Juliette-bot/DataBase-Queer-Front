@@ -15,14 +15,17 @@ export interface ResourceData {
 }
 
 export interface MediaData {
+    id: number;
     type: string;
 }
 
 
-export interface Category {
+export interface CategoryData {
+    id: number;
     name: string;
 }
 
-export interface subCategory {
+export interface subCategoryData {
+    id: number;
     name: string;
 }

@@ -3,7 +3,7 @@ import type React from 'react';
 import { FormField } from '../molecules/FromField';
 import { SelectField } from '../molecules/SelectField';
 import { Button } from '../atoms/Button';
-import type { ResourceData } from '../../types/ResourceTypes';
+import type { CategoryData, MediaData, ResourceData, subCategoryData } from '../../types/ResourceTypes';
 import type { SelectOption } from '../../types/FormTypes';
 import { AddResourceService, GetMediaService, GetCategoryService, GetSubCategoryService } from '../../services/Api';
 
@@ -34,9 +34,8 @@ export const AddResourceForm: React.FC = () => {
             try {
                 const data = await GetMediaService.getAll();
                 console.log('Données médias reçues:', data);
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const options = data.map((media: any) => ({
-                    value: media.id.toString(),
+                const options = data.map((media: MediaData) => ({
+                    value: media.id,
                     label: media.type
                 }));
                 setMediaOptions(options);
@@ -53,9 +52,8 @@ export const AddResourceForm: React.FC = () => {
             try {
                 const data = await GetCategoryService.getAll();
                 console.log('Données catégories reçues:', data);
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const options = data.map((category: any) => ({
-                    value: category.id.toString(),
+                const options = data.map((category: CategoryData) => ({
+                    value: category.id,
                     label: category.name
                 }));
                  console.log('Options catégories transformées:', options);
@@ -71,9 +69,8 @@ export const AddResourceForm: React.FC = () => {
         const fetchSubCategories = async () => {
             try {
                 const data = await GetSubCategoryService.getAll();
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const options = data.map((subCategory: any) => ({
-                    value: subCategory.id.toString(),
+                const options = data.map((subCategory: subCategoryData) => ({
+                    value: subCategory.id,
                     label: subCategory.name
                 }));
                 setSubCategoryOptions(options);
