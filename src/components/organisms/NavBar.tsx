@@ -32,7 +32,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               Accueil
             </Link>
             <Link 
-              to="/resources" 
+              to="/resource" 
               className="text-content-primary hover:text-action transition-colors font-medium"
             >
               Ressources

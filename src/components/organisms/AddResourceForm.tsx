@@ -216,7 +216,7 @@ export const AddResourceForm: React.FC = () => {
             />
 
             <FormField
-                label="Créateur/Créatrice"
+                label="Créateur.ice"
                 name="creator"
                 type='text'
                 value={formData.creator}

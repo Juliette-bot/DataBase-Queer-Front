@@ -5,7 +5,7 @@ import { Navbar } from './components/organisms/NavBar';
 import { Footer } from './components/organisms/Footer';
 import { HomePage } from './pages/HomePage';
 import { AuthPage } from './pages/AuthPage';
-import { ResourcesPage } from './pages/RessourcesPage';
+import { ResourcePage } from './pages/RessourcesPage';
 import { SharePage } from './pages/SharePage';
 
 function App() {
@@ -28,7 +28,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/auth" element={<AuthPage />} />
-            <Route path="/resources" element={<ResourcesPage />} />
+            <Route path="/resource" element={<ResourcePage />} />
             <Route path="/share" element={<SharePage />} />
           </Routes>
         </main>
