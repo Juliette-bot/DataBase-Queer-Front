@@ -1,13 +1,14 @@
 export interface FormFieldProps {
     label: string;
     name: string;
+    type?: string;
     value: string;
-    type: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     error?: string;
     required?: boolean;
+    isTextarea?: boolean; 
+    rows?: number; 
 }
-
 export interface SelectFieldProps {
     label: string;
     name: string;

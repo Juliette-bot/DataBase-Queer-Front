@@ -81,7 +81,7 @@ export const AddResourceForm: React.FC = () => {
         fetchSubCategories();
     }, []);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
 
@@ -153,7 +153,7 @@ export const AddResourceForm: React.FC = () => {
             </h2>
 
             <SelectField
-                label='Cette ressource se trouve dans :'
+                label='Cette ressource peut se :'
                 name='media'
                 value={formData.media}
                 onChange={handleSelectChange}
@@ -189,11 +189,12 @@ export const AddResourceForm: React.FC = () => {
             <FormField
                 label="Description"
                 name="description"
-                type='text'
                 value={formData.description}
                 onChange={handleChange}
                 error={errors.description}
                 required
+                isTextarea={true}
+                rows={5} 
             />
 
             <FormField
@@ -203,7 +204,6 @@ export const AddResourceForm: React.FC = () => {
                 value={formData.url}
                 onChange={handleChange}
                 error={errors.url}
-                required
             />
 
             <FormField
