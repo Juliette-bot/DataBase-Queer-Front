@@ -17,6 +17,7 @@ export interface SelectFieldProps {
     onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
     error?: string;
     required?: boolean;
+    disabled?: boolean;
 }
 
 export interface SelectOption {

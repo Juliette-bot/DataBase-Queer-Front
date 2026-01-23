@@ -28,9 +28,8 @@ export const GetCategoryService = {
         const response = await fetchWithAuth('/api/category');
         return await response.json();
     },
-
     getByMediaId: async (mediaId: string) => {
-        const response = await fetchWithAuth(`/api/media/${mediaId}/category`);                                   
+        const response = await fetchWithAuth(`/api/media/${mediaId}/category`); 
         return await response.json();
     }
 }
@@ -40,14 +39,11 @@ export const GetSubCategoryService = {
         const response = await fetchWithAuth('/api/subCategory');
         return await response.json();
     },
-
     getByCategoryId: async (categoryId: string) => {
-        const response = await fetchWithAuth(`/api/category/${categoryId}/subCategory`);
+        const response = await fetchWithAuth(`/api/category/${categoryId}/subCategory`); 
         return await response.json();
     }
 }
-
-
 export const GetResourceService = {
     getAll: async () => {
         const response = await fetch (`${API_BASE_URL}/api/resource`)
