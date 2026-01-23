@@ -7,7 +7,6 @@ import type { CategoryData, MediaData, ResourceData, subCategoryData } from '../
 import type { SelectOption } from '../../types/FormTypes';
 import { AddResourceService, GetMediaService, GetCategoryService, GetSubCategoryService } from '../../services/Api';
 
-
 export const AddResourceForm: React.FC = () => {
     const [formData, setFormData] = useState<ResourceData>({
         media: '',
@@ -35,7 +34,7 @@ export const AddResourceForm: React.FC = () => {
                 const data = await GetMediaService.getAll();
                 console.log('Données médias reçues:', data);
                 const options = data.map((media: MediaData) => ({
-                    value: media.id,
+                    value: media.id.toString(),
                     label: media.type
                 }));
                 setMediaOptions(options);
@@ -44,41 +43,6 @@ export const AddResourceForm: React.FC = () => {
             }
         };
         fetchMedia();
-    }, []);
-
-    
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const data = await GetCategoryService.getAll();
-                console.log('Données catégories reçues:', data);
-                const options = data.map((category: CategoryData) => ({
-                    value: category.id,
-                    label: category.name
-                }));
-                 console.log('Options catégories transformées:', options);
-                setCategoryOptions(options);
-            } catch (error) {
-                console.error('Erreur chargement catégories:', error);
-            }
-        };
-        fetchCategories();
-    }, []);
-
-    useEffect(() => {
-        const fetchSubCategories = async () => {
-            try {
-                const data = await GetSubCategoryService.getAll();
-                const options = data.map((subCategory: subCategoryData) => ({
-                    value: subCategory.id,
-                    label: subCategory.name
-                }));
-                setSubCategoryOptions(options);
-            } catch (error) {
-                console.error('Erreur chargement sous-catégories:', error);
-            }
-        };
-        fetchSubCategories();
     }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -90,12 +54,47 @@ export const AddResourceForm: React.FC = () => {
         }
     };
 
-    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleSelectChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
 
         if (errors[name as keyof ResourceData]) {
             setErrors(prev => ({ ...prev, [name]: undefined }));
+        }
+
+        if (name === 'media' && value) {
+            try {
+                const data = await GetCategoryService.getByMediaId(value);
+                console.log('Catégories pour media', value, ':', data);
+                const options = data.map((category: CategoryData) => ({
+                    value: category.id.toString(),
+                    label: category.name
+                }));
+                setCategoryOptions(options);
+                
+                setFormData(prev => ({ ...prev, category: '', subCategory: '' }));
+                setSubCategoryOptions([]);
+            } catch (error) {
+                console.error('Erreur chargement catégories:', error);
+            }
+        }
+
+        if (name === 'category' && value) {
+            try {
+                // Charger les sous-catégories de cette catégorie
+                const data = await GetSubCategoryService.getByCategoryId(value);
+                console.log('Sous-catégories pour category', value, ':', data);
+                const options = data.map((subCategory: subCategoryData) => ({
+                    value: subCategory.id.toString(),
+                    label: subCategory.name
+                }));
+                setSubCategoryOptions(options);
+                
+                // Reset le choix suivant
+                setFormData(prev => ({ ...prev, subCategory: '' }));
+            } catch (error) {
+                console.error('Erreur chargement sous-catégories:', error);
+            }
         }
     };
 
@@ -138,6 +137,8 @@ export const AddResourceForm: React.FC = () => {
                 duration_minutes: '',
                 platform: '',
             });
+            setCategoryOptions([]);
+            setSubCategoryOptions([]);
         } catch (error) {
             console.error('Erreur:', error);
             alert('Erreur lors de l\'ajout de la ressource');
@@ -166,6 +167,7 @@ export const AddResourceForm: React.FC = () => {
                 value={formData.category}
                 onChange={handleSelectChange}
                 options={categoryOptions}
+                disabled={!formData.media} 
             />
 
             <SelectField
@@ -174,6 +176,7 @@ export const AddResourceForm: React.FC = () => {
                 value={formData.subCategory}
                 onChange={handleSelectChange}
                 options={subCategoryOptions}
+                disabled={!formData.category} 
             />
 
             <FormField
@@ -194,7 +197,7 @@ export const AddResourceForm: React.FC = () => {
                 error={errors.description}
                 required
                 isTextarea={true}
-                rows={5} 
+                rows={5}
             />
 
             <FormField

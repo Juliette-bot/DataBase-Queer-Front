@@ -13,7 +13,8 @@ export const SelectField: React.FC<SelectFieldProps> = ({
     error,
     required = false,
     value,
-    onChange
+    onChange,
+    disabled = false
 }) => {
     return (
         <div className="mb-4">
@@ -29,6 +30,7 @@ export const SelectField: React.FC<SelectFieldProps> = ({
                 hasError={!!error}
                 aria-invalid={!!error}
                 aria-describedby={error ? `${name}-error` : undefined}
+                disabled={disabled}
             />
             <ErrorMessage message={error} id={`${name}-error`} />
         </div>
