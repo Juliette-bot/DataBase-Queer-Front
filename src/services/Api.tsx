@@ -1,4 +1,4 @@
-import type { ResourceData } from "../types/ResourceTypes";
+import type { ResourcePayload } from "../types/ResourceTypes";
 import { fetchWithAuth } from "./AuthApi";
 
 const API_BASE_URL = 'http://localhost:8080';
@@ -6,7 +6,7 @@ const API_BASE_URL = 'http://localhost:8080';
 
 
 export const AddResourceService = {
-    addResource: async (resourceData: ResourceData) => {
+    addResource: async (resourceData: ResourcePayload) => {
         const response = await fetchWithAuth('/api/resource/add', {
             method: 'POST',
             body: JSON.stringify(resourceData),
