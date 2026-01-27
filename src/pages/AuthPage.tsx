@@ -5,7 +5,11 @@ import { LoginForm } from '../components/organisms/LoginFrom';
 import { RegisterForm } from '../components/organisms/RegisterForm';
 import { Button } from '../components/atoms/Button';
 
-export const AuthPage: React.FC = () => {
+interface AuthPageProps {
+  onAuthSuccess?: () => void;
+}
+
+export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
   const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
 
   return (
@@ -14,7 +18,7 @@ export const AuthPage: React.FC = () => {
         <h1 className="text-4xl font-bold text-center text-content-primary mb-8">
           Authentification
         </h1>
-        
+
         <div className="flex gap-4 mb-6 bg-surface-light p-2 rounded-card shadow-card">
           <Button
             variant={activeTab === 'login' ? 'action' : 'neutral'}
@@ -31,8 +35,12 @@ export const AuthPage: React.FC = () => {
             Inscription
           </Button>
         </div>
-        
-        {activeTab === 'login' ? <LoginForm /> : <RegisterForm />}
+
+        {activeTab === 'login' ? (
+          <LoginForm onSuccess={onAuthSuccess} />
+        ) : (
+          <RegisterForm onSuccess={onAuthSuccess} />
+        )}
       </div>
     </div>
   );

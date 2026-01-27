@@ -1,23 +1,29 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type React from 'react';
 import { FormField } from '../molecules/FromField';
 import { Button } from '../atoms/Button';
 import { authService } from '../../services/AuthApi';
 
-export const LoginForm: React.FC = () => {
+interface LoginFormProps {
+    onSuccess?: () => void;
+}
+
+export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
-    
+
     const [errors, setErrors] = useState<{
         email?: string;
         password?: string;
     }>({});
 
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
         if (errors[name as keyof typeof errors]) {
@@ -43,7 +49,12 @@ export const LoginForm: React.FC = () => {
         try {
             const data = await authService.login(formData.email, formData.password);
             console.log('Connecté avec succès !', data);
-            // TODO: Stocker le token, rediriger l'utilisateur
+            
+            // Appelle le callback de succès
+            onSuccess?.();
+            
+            // Redirige vers l'accueil
+            navigate('/');
         } catch (error) {
             console.error('Erreur:', error);
             setErrors({ 

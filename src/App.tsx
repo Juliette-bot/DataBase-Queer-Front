@@ -24,7 +24,7 @@ function App() {
           onLogout={handleLogout}
         />
         
-        <main className="flex-1">
+        <main className="">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/auth" element={<AuthPage />} />

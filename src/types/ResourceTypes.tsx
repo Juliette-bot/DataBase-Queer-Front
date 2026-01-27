@@ -26,10 +26,13 @@ export interface ResourceFormData {
         platform: string;
         videoType: string;
     };
+    playMetadata: {
+        creator: string;
+        gameGenre: string;
+        playerNumber: string;
+    };
 }
 
-// ===== TYPE POUR L'API RESPONSE (avec objets complets) =====
-// Dans ResourceTypes.ts
 export interface ResourceData {
     id: number;
     title: string;
@@ -39,18 +42,17 @@ export interface ResourceData {
     language: string;
     createdAt?: string;
     updatedAt?: string;
-    mediaId: number;  // 👈 L'ID du média
-    categoryId: number;  // 👈 L'ID de la catégorie
+    mediaId: number;  
+    categoryId: number;  
     userId: number;
-    mediaType: string;  // 👈 Le type en string (read/listen/watch)
-    categoryName: string;  // 👈 Le nom en string
-    // Métadonnées
+    mediaType: string; 
+    categoryName: string;  
     readMetadata?: ReadMetadataData;
     listenMetadata?: ListenMetadataData;
     watchMetadata?: WatchMetadataData;
+    playMetadata?: PlayMetadataData
 }
 
-// ===== TYPE POUR LE PAYLOAD (ce qu'on envoie à l'API) =====
 export interface ResourcePayload {
     title: string;
     description: string;
@@ -66,8 +68,11 @@ export interface ResourcePayload {
     creator?: string;
     duration?: string;
     platform?: string;
-    episodeNumber?: string;
+    episodeNumber?: string; 
     videoType?: string;
+    gameGenre?: string;
+    playerNumber?: string;
+
 }
 
 export interface ReadMetadataData {
@@ -89,6 +94,13 @@ export interface WatchMetadataData {
     duration: string;
     platform: string;
     videoType: string;
+}
+
+
+export interface PlayMetadataData {
+    creator: string;
+    gameGenre: string;
+    playerNumber: string;
 }
 
 export interface MediaData {

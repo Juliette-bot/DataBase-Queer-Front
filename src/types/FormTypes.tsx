@@ -3,7 +3,7 @@ export interface FormFieldProps {
     name: string;
     type?: string;
     value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
     error?: string;
     required?: boolean;
     isTextarea?: boolean; 
@@ -15,7 +15,7 @@ export interface SelectFieldProps {
     name: string;
     options: SelectOption[];
     value: string;
-    onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void; // 👈 Change ici aussi
     error?: string;
     required?: boolean;
     disabled?: boolean;
