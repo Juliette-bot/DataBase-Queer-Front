@@ -9,6 +9,7 @@ export const SharePage: React.FC = () => {
         <h1 className="text-4xl font-bold text-content-primary mb-6">
           Partage de ressources
         </h1>
+        
         <p className="text-content-secondary mb-8">
           Out Together est une plateforme collaborative où chacun·e peut contribuer en partageant des ressources LGBTQIA+ utiles et inclusives. Votre contribution aide la communauté à grandir ! 🌈
         </p>

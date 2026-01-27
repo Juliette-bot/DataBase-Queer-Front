@@ -18,8 +18,8 @@ export const ResourceCard = ({
         <article className="bg-surface-light rounded-card shadow-card hover:shadow-card-hover transition-shadow p-6 space-y-4">
             <ResourceCardHeader 
                 title={resource.title}
-                category={resource.categoryName}  // 👈 Direct
-                tags={[resource.mediaType]}  // 👈 Direct
+                category={resource.categoryName} 
+                tags={[resource.mediaType]} 
             />
             <ResourceCardContent 
                 description={resource.description}

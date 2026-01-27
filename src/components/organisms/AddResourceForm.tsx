@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import type React from 'react';
 import { FormField } from '../molecules/FromField';
 import { SelectField } from '../molecules/SelectField';
+import { RadioFieldList } from '../molecules/RadioFieldList';
 import { ReadMetadataFields } from '../molecules/ReadMetadataFields';
 import { ListenMetadataFields } from '../molecules/ListenMetadataFields';
 import { WatchMetadataFields } from '../molecules/WatchMetadataFields';
 import { Button } from '../atoms/Button';
-import type { SelectOption } from '../../types/FormTypes';
+import type { SelectOption, RadioButtonValue } from '../../types/FormTypes';
 import { AddResourceService, GetMediaService, GetCategoryService } from '../../services/Api';
 import type { CategoryData, MediaData, ResourceFormData, ResourceFormErrors, ResourcePayload } from '../../types/ResourceTypes';
 
@@ -44,6 +45,7 @@ export const AddResourceForm: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [mediaOptions, setMediaOptions] = useState<SelectOption[]>([]);
     const [categoryOptions, setCategoryOptions] = useState<SelectOption[]>([]);
+    const [radioValues, setRadioValues] = useState<RadioButtonValue[]>([]);
 
     useEffect(() => {
         const fetchMedia = async () => {
@@ -107,6 +109,10 @@ export const AddResourceForm: React.FC = () => {
     }
 };
 
+const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Filter out forms related to checked box.``
+    const { name, value, checked } = e.target;
+}
 const handleSelectChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {  // 👈 Ajoute les 3 types
     const { name, value } = e.target;
     
@@ -115,6 +121,7 @@ const handleSelectChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLTe
         const [metadataType, field] = name.split('.');
         
         if (metadataType === 'readMetadata') {
+            console.log('Updating readMetadata field:', field, 'with value:', value);
             setFormData(prev => ({
                 ...prev,
                 readMetadata: {
@@ -156,22 +163,35 @@ const handleSelectChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLTe
         try {
             const data = await GetCategoryService.getByMediaId(value);
             console.log('Catégories pour media', value, ':', data);
+
             const options = data.map((category: CategoryData) => ({
                 value: category.id.toString(),
                 label: category.name
             }));
+
             setCategoryOptions(options);
             
             const selectedMedia = mediaOptions.find(m => m.value === value);
             setSelectedMediaType(selectedMedia?.label.toLowerCase() || '');
-            
+
+            console.log('Selected media type:', selectedMedia?.value);
+
+            if(selectedMedia?.label == "read") {
+                const formId = document.getElementById('categoryId');
+                if (formId) {
+                    formId.scrollIntoView({ behavior: 'smooth' })
+                }
+                console.log('Scrolled to language select');
+            }
+             
             setFormData(prev => ({ ...prev, categoryId: '' }));
         } catch (error) {
             console.error('Erreur chargement catégories:', error);
         }
     }
 };
-    const handleSubmit = async (e: React.FormEvent) => {
+
+const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const newErrors: ResourceFormErrors = {};
@@ -229,17 +249,45 @@ const handleSelectChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLTe
                 Ajouter une ressource
             </h2>
 
-            <SelectField
-                label='Cette ressource peut se :'
-                name='mediaId'
-                value={formData.mediaId}
-                onChange={handleSelectChange}
-                options={mediaOptions}
-                error={errors.mediaId}
-                required
-            />
+            <div id="section-0" className='min-h-screen flex justify-center flex-col'>
 
-            <SelectField
+            <div className='mb-4 font-semibold text-lg flex gap-4'>
+                <div>
+                    <input type="radio" id="huey" name="drone" value="huey" checked />
+                    <label for="huey">Huey</label>
+                </div>
+
+                <div>
+                    <input type="radio" id="dewey" name="drone" value="dewey" />
+                    <label for="dewey">Dewey</label>
+                </div>
+
+                <div>
+                    <input type="radio" id="louie" name="drone" value="louie" />
+                    <label for="louie">Louie</label>
+                </div>
+            </div>
+                {           
+                /* 
+                <RadioFieldList 
+                    label='Tags associés à la ressource :'
+                    nameId='mediaId'
+                    types={formData.mediaId}
+                    onChange={handleRadioChange}
+                /> */}
+
+                {/* <SelectField
+                    label='Cette ressource peut se :'
+                    name='mediaId'
+                    value={formData.mediaId}
+                    onChange={handleSelectChange}
+                    options={mediaOptions}
+                    required
+                /> */}
+            </div>
+    
+            <div id="section-1">
+                <SelectField
                 label='On pourrait la ranger dans la catégorie :'
                 name='categoryId'
                 value={formData.categoryId}
@@ -248,8 +296,10 @@ const handleSelectChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLTe
                 disabled={!formData.mediaId}
                 error={errors.categoryId}
                 required
-            />
+                />
+            </div>   
 
+            <div id="section-2">
             <FormField
                 label="Titre de la ressource"
                 name="title"
@@ -259,6 +309,7 @@ const handleSelectChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLTe
                 error={errors.title}
                 required
             />
+            </div>
 
             <FormField
                 label="Description"
@@ -280,7 +331,8 @@ const handleSelectChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLTe
                 error={errors.url}
                 required
             />
-
+            
+            <div id="languageselect">
             <FormField
                 label="Langue"
                 name="language"
@@ -288,6 +340,7 @@ const handleSelectChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLTe
                 value={formData.language}
                 onChange={handleChange}
             />
+            </div>
 
             {selectedMediaType === 'read' && (
     <div className="mt-6 p-6 border border-surface-gray rounded-card bg-surface-light shadow-card">
