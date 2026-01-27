@@ -4,8 +4,6 @@ import { Label } from '../atoms/Label';
 import { ErrorMessage } from '../atoms/ErrorMessage';
 import type { SelectFieldProps } from "../../types/FormTypes";
 
-
-
 export const SelectField: React.FC<SelectFieldProps> = ({ 
     label,
     name,
