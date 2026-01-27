@@ -1,10 +1,15 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type React from 'react';
 import { FormField } from '../molecules/FromField';
 import { Button } from '../atoms/Button';
 import { authService } from '../../services/AuthApi';
 
-export const RegisterForm: React.FC = () => {
+interface RegisterFormProps {
+    onSuccess?: () => void;
+}
+
+export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -22,8 +27,9 @@ export const RegisterForm: React.FC = () => {
     }>({});
 
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
         if (errors[name as keyof typeof errors]) {
@@ -38,15 +44,15 @@ export const RegisterForm: React.FC = () => {
         const newErrors: typeof errors = {};
         
         if (!formData.firstName) {
-            newErrors.firstName = "Le nom d'utilisateur est requis";
-        } else if (formData.firstName.length < 3) {
-            newErrors.firstName = "Le nom d'utilisateur doit contenir au moins 3 caractères";
+            newErrors.firstName = "Le prénom est requis";
+        } else if (formData.firstName.length < 2) {
+            newErrors.firstName = "Le prénom doit contenir au moins 2 caractères";
         }
         
-          if (!formData.lastName) {
-            newErrors.lastName = "Le nom d'utilisateur est requis";
-        } else if (formData.lastName.length < 3) {
-            newErrors.lastName = "Le nom d'utilisateur doit contenir au moins 3 caractères";
+        if (!formData.lastName) {
+            newErrors.lastName = "Le nom est requis";
+        } else if (formData.lastName.length < 2) {
+            newErrors.lastName = "Le nom doit contenir au moins 2 caractères";
         }
         
         if (!formData.email) {
@@ -81,6 +87,12 @@ export const RegisterForm: React.FC = () => {
                 formData.password
             );
             console.log('Inscription réussie !', data);
+            
+            // Appelle le callback de succès
+            onSuccess?.();
+            
+            // Redirige vers l'accueil
+            navigate('/');
         } catch (error) {
             console.error('Erreur:', error);
             setErrors({ 

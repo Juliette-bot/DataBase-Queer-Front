@@ -7,9 +7,10 @@ import { ReadMetadataFields } from '../molecules/ReadMetadataFields';
 import { ListenMetadataFields } from '../molecules/ListenMetadataFields';
 import { WatchMetadataFields } from '../molecules/WatchMetadataFields';
 import { Button } from '../atoms/Button';
-import type { SelectOption, RadioButtonValue } from '../../types/FormTypes';
+import type { SelectOption } from '../../types/FormTypes';
 import { AddResourceService, GetMediaService, GetCategoryService } from '../../services/Api';
 import type { CategoryData, MediaData, ResourceFormData, ResourceFormErrors, ResourcePayload } from '../../types/ResourceTypes';
+import { PlayMetadataFields } from '../molecules/PlayMetadataFields';
 
 export const AddResourceForm: React.FC = () => {
     const [formData, setFormData] = useState<ResourceFormData>({
@@ -38,6 +39,11 @@ export const AddResourceForm: React.FC = () => {
             platform: '',
             videoType: '',
         },
+        playMetadata: {
+             creator: '',
+            gameGenre: '',
+            playerNumber: '',
+        }
     });
 
     const [selectedMediaType, setSelectedMediaType] = useState<string>('');
@@ -45,7 +51,6 @@ export const AddResourceForm: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [mediaOptions, setMediaOptions] = useState<SelectOption[]>([]);
     const [categoryOptions, setCategoryOptions] = useState<SelectOption[]>([]);
-    const [radioValues, setRadioValues] = useState<RadioButtonValue[]>([]);
 
     useEffect(() => {
         const fetchMedia = async () => {
@@ -63,8 +68,9 @@ export const AddResourceForm: React.FC = () => {
         };
         fetchMedia();
     }, []);
+    
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+ const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     
     if (name.includes('.')) {
@@ -94,13 +100,21 @@ export const AddResourceForm: React.FC = () => {
                     [field]: value
                 }
             }));
-        }
+        } else if (metadataType === 'playMetadata') {
+            setFormData(prev => ({
+                ...prev,
+                playMetadata: {
+                    ...prev.playMetadata,
+                    [field]: value
+                }
+            }));
+        } 
         
         setErrors(prev => ({
             ...prev,
             [metadataType]: undefined
         }));
-    } else {
+    } else { 
         setFormData(prev => ({ ...prev, [name]: value }));
         setErrors(prev => ({
             ...prev,
@@ -109,14 +123,69 @@ export const AddResourceForm: React.FC = () => {
     }
 };
 
+
 const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Filter out forms related to checked box.``
-    const { name, value, checked } = e.target;
-}
-const handleSelectChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {  // 👈 Ajoute les 3 types
     const { name, value } = e.target;
     
-    // Gestion des champs metadata nested pour les selects
+    setFormData(prev => ({ 
+        ...prev, 
+        [name]: value,
+        categoryId: '' 
+    }));
+    
+    if (value) {
+        loadCategoriesForMedia(value);
+    } else {
+        setCategoryOptions([]);
+    }
+    
+    setTimeout(() => scrollToSection('section-category'), 300);
+};
+
+const handleNextToMetadata = () => {
+    scrollToSection('section-metadata');
+};
+
+const loadCategoriesForMedia = async (mediaId: string) => {
+    try {
+        const data = await GetCategoryService.getByMediaId(mediaId);
+        const options = data.map((category: CategoryData) => ({
+            value: category.id.toString(),
+            label: category.name
+        }));
+        setCategoryOptions(options);
+        
+        const selectedMedia = mediaOptions.find(m => m.value === mediaId);
+        const mediaLabel = selectedMedia?.label.toLowerCase() || '';
+        
+        
+        const mediaTypeMap: { [key: string]: string } = {
+            'lire': 'read',
+            'écouter': 'listen',
+            'regarder': 'watch',
+            'jouer': 'play'
+        };
+        
+        setSelectedMediaType(mediaTypeMap[mediaLabel] || mediaLabel);
+        console.log('Type de média sélectionné:', mediaTypeMap[mediaLabel] || mediaLabel);
+    } catch (error) {
+        console.error('Erreur chargement catégories:', error);
+    }
+};
+
+const scrollToSection = (sectionId: string) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+        section.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
+};
+
+const handleSelectChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    console.log('avant le if')
     if (name.includes('.')) {
         const [metadataType, field] = name.split('.');
         
@@ -145,6 +214,14 @@ const handleSelectChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLTe
                     [field]: value
                 }
             }));
+        }  else if (metadataType === 'playMetadata') {
+            setFormData(prev => ({
+                ...prev,
+                playMetadata: {
+                    ...prev.playMetadata,
+                    [field]: value
+                }
+            }));
         }
         
         setErrors(prev => ({
@@ -159,37 +236,36 @@ const handleSelectChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLTe
         }));
     }
 
-    if (name === 'mediaId' && value) {
+   if (name === 'mediaId' && value) {
         try {
             const data = await GetCategoryService.getByMediaId(value);
-            console.log('Catégories pour media', value, ':', data);
-
             const options = data.map((category: CategoryData) => ({
                 value: category.id.toString(),
                 label: category.name
             }));
-
             setCategoryOptions(options);
             
             const selectedMedia = mediaOptions.find(m => m.value === value);
             setSelectedMediaType(selectedMedia?.label.toLowerCase() || '');
-
-            console.log('Selected media type:', selectedMedia?.value);
-
-            if(selectedMedia?.label == "read") {
-                const formId = document.getElementById('categoryId');
-                if (formId) {
-                    formId.scrollIntoView({ behavior: 'smooth' })
-                }
-                console.log('Scrolled to language select');
-            }
-             
+            
             setFormData(prev => ({ ...prev, categoryId: '' }));
+            
+            setTimeout(() => scrollToSection('section-category'), 300);
         } catch (error) {
             console.error('Erreur chargement catégories:', error);
         }
     }
-};
+    
+    if (name === 'categoryId' && value) {
+        setTimeout(() => scrollToSection('section-details'), 300);
+    };
+
+    if (name === 'section-details' && value) {
+        setTimeout(() => scrollToSection('section-metadata'), 300);
+    };
+    };
+
+
 
 const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -219,7 +295,9 @@ const handleSubmit = async (e: React.FormEvent) => {
 
     setIsLoading(true);
     try {
+
         const payload: ResourcePayload = {  
+            
             title: formData.title,
             description: formData.description,
             url: formData.url,
@@ -230,6 +308,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             ...(selectedMediaType === 'read' ? formData.readMetadata: null),  
             ...(selectedMediaType === 'listen' ? formData.listenMetadata : null), 
             ...(selectedMediaType === 'watch' ? formData.watchMetadata : null),
+            ...(selectedMediaType === 'play' ? formData.playMetadata : null),
         };
 
         await AddResourceService.addResource(payload);
@@ -243,152 +322,157 @@ const handleSubmit = async (e: React.FormEvent) => {
         setIsLoading(false);
     }
 };
-    return (
-        <form onSubmit={handleSubmit} className="bg-surface-light p-8 rounded-card shadow-card">
-            <h2 className="text-3xl font-bold text-content-primary mb-6">
-                Ajouter une ressource
-            </h2>
 
-            <div id="section-0" className='min-h-screen flex justify-center flex-col'>
 
-            <div className='mb-4 font-semibold text-lg flex gap-4'>
-                <div>
-                    <input type="radio" id="huey" name="drone" value="huey" checked />
-                    <label for="huey">Huey</label>
-                </div>
+   return (
+    <form onSubmit={handleSubmit} className="bg-surface-light p-8 rounded-card shadow-card">
+        <h2 className="text-3xl font-bold text-content-primary mb-6">
+            Ajouter une ressource
+        </h2>
 
-                <div>
-                    <input type="radio" id="dewey" name="drone" value="dewey" />
-                    <label for="dewey">Dewey</label>
-                </div>
+        {/* Section 1 : Choix du type de média */}
+        <div id="section-media" className="min-h-screen flex flex-col justify-center scroll-mt-8">
+            <RadioFieldList 
+                label='Cette ressource peut se :'
+                nameId='mediaId'
+                types={mediaOptions}
+                onChange={handleRadioChange}
+            />
+        </div>
 
-                <div>
-                    <input type="radio" id="louie" name="drone" value="louie" />
-                    <label for="louie">Louie</label>
-                </div>
-            </div>
-                {           
-                /* 
-                <RadioFieldList 
-                    label='Tags associés à la ressource :'
-                    nameId='mediaId'
-                    types={formData.mediaId}
-                    onChange={handleRadioChange}
-                /> */}
-
-                {/* <SelectField
-                    label='Cette ressource peut se :'
-                    name='mediaId'
-                    value={formData.mediaId}
-                    onChange={handleSelectChange}
-                    options={mediaOptions}
-                    required
-                /> */}
-            </div>
-    
-            <div id="section-1">
+        {/* Section 2 : Choix de la catégorie */}
+        {formData.mediaId && (
+            <div id="section-category" className="min-h-screen flex flex-col justify-center scroll-mt-8">
                 <SelectField
-                label='On pourrait la ranger dans la catégorie :'
-                name='categoryId'
-                value={formData.categoryId}
-                onChange={handleSelectChange}
-                options={categoryOptions}
-                disabled={!formData.mediaId}
-                error={errors.categoryId}
-                required
+                    label='On pourrait la ranger dans la catégorie :'
+                    name='categoryId'
+                    value={formData.categoryId}
+                    onChange={handleSelectChange}
+                    options={categoryOptions}
+                    error={errors.categoryId}
+                    required
                 />
-            </div>   
+            </div>
+        )}
 
-            <div id="section-2">
-            <FormField
-                label="Titre de la ressource"
-                name="title"
-                type='text'
-                value={formData.title}
-                onChange={handleChange}
-                error={errors.title}
-                required
-            />
+        {/* Section 3 : Détails de la ressource */}
+        {formData.categoryId && (
+            <div id="section-details" className="min-h-screen flex flex-col justify-center scroll-mt-8 space-y-6">
+                <FormField
+                    label="Titre de la ressource"
+                    name="title"
+                    type='text'
+                    value={formData.title}
+                    onChange={handleChange}
+                    error={errors.title}
+                    required
+                />
+
+                <FormField
+                    label="Description"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    error={errors.description}
+                    required
+                    isTextarea={true}
+                    rows={5}
+                />
+
+                <FormField
+                    label="URL"
+                    name="url"
+                    type="url"
+                    value={formData.url}
+                    onChange={handleChange}
+                    error={errors.url}
+                    required
+                />
+                
+                <FormField
+                    label="Langue"
+                    name="language"
+                    type='text'
+                    value={formData.language}
+                    onChange={handleChange}
+                />
+
+                   <Button
+                    type="button"
+                    variant="action"
+                    className="w-full mt-6"
+                    disabled={isLoading}
+                    onClick={handleNextToMetadata}
+                >
+                    Suivant
+                </Button>
             </div>
 
-            <FormField
-                label="Description"
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                error={errors.description}
-                required
-                isTextarea={true}
-                rows={5}
-            />
+        )}
 
-            <FormField
-                label="URL"
-                name="url"
-                type="url"
-                value={formData.url}
-                onChange={handleChange}
-                error={errors.url}
-                required
-            />
-            
-            <div id="languageselect">
-            <FormField
-                label="Langue"
-                name="language"
-                type='text'
-                value={formData.language}
-                onChange={handleChange}
-            />
+        {formData.title && formData.description && formData.url && (
+            <div id="section-metadata" className="min-h-screen flex flex-col justify-center scroll-mt-8">
+                {selectedMediaType === 'read' && (
+                    <div className="p-6 border border-surface-gray rounded-card bg-surface-light shadow-card">
+                        <h3 className="text-xl font-semibold text-content-primary mb-4">
+                            Informations spécifiques (Lecture)
+                        </h3>
+                        <ReadMetadataFields
+                            values={formData.readMetadata}
+                            onChange={handleSelectChange}
+                            errors={errors.readMetadata}
+                        />
+                    </div>
+                )}
+
+                {selectedMediaType === 'listen' && (
+                    <div className="p-6 border border-surface-gray rounded-card bg-surface-light shadow-card">
+                        <h3 className="text-xl font-semibold text-content-primary mb-4">
+                            Informations spécifiques (Audio)
+                        </h3>
+                        <ListenMetadataFields
+                            values={formData.listenMetadata}
+                            onChange={handleSelectChange}
+                            errors={errors.listenMetadata}
+                        />
+                    </div>
+                )}
+
+                {selectedMediaType === 'watch' && (
+                    <div className="p-6 border border-surface-gray rounded-card bg-surface-light shadow-card">
+                        <h3 className="text-xl font-semibold text-content-primary mb-4">
+                            Informations spécifiques (Vidéo)
+                        </h3>
+                        <WatchMetadataFields
+                            values={formData.watchMetadata}
+                            onChange={handleSelectChange}
+                            errors={errors.watchMetadata}
+                        />
+                    </div>
+                )}
+
+                {selectedMediaType === 'play' && (
+                    <div className="p-6 border border-surface-gray rounded-card bg-surface-light shadow-card">
+                        <h3 className="text-xl font-semibold text-content-primary mb-4">
+                            Informations spécifiques (Jeu)
+                        </h3>
+                        <PlayMetadataFields
+                            values={formData.playMetadata}
+                            onChange={handleSelectChange}
+                        />
+                    </div>
+                )}
+
+                <Button
+                    type="submit"
+                    variant="action"
+                    className="w-full mt-6"
+                    disabled={isLoading}
+                >
+                    {isLoading ? 'Ajout en cours...' : 'Ajouter la ressource'}
+                </Button>
             </div>
-
-            {selectedMediaType === 'read' && (
-    <div className="mt-6 p-6 border border-surface-gray rounded-card bg-surface-light shadow-card">
-        <h3 className="text-xl font-semibold text-content-primary mb-4">
-            Informations spécifiques (Lecture)
-        </h3>
-        <ReadMetadataFields
-            values={formData.readMetadata}
-            onChange={handleSelectChange}
-            errors={errors.readMetadata}
-        />
-    </div>
-)}
-
-{selectedMediaType === 'listen' && (
-    <div className="mt-6 p-6 border border-surface-gray rounded-card bg-surface-light shadow-card">
-        <h3 className="text-xl font-semibold text-content-primary mb-4">
-            Informations spécifiques (Audio)
-        </h3>
-        <ListenMetadataFields
-            values={formData.listenMetadata}
-            onChange={handleSelectChange}
-            errors={errors.listenMetadata}
-        />
-    </div>
-)}
-
-{selectedMediaType === 'watch' && (
-    <div className="mt-6 p-6 border border-surface-gray rounded-card bg-surface-light shadow-card">
-        <h3 className="text-xl font-semibold text-content-primary mb-4">
-            Informations spécifiques (Vidéo)
-        </h3>
-        <WatchMetadataFields
-            values={formData.watchMetadata}
-            onChange={handleSelectChange}
-            errors={errors.watchMetadata}
-        />
-    </div>
-)}
-
-            <Button
-                type="submit"
-                variant="action"
-                className="w-full mt-6"
-                disabled={isLoading}
-            >
-                {isLoading ? 'Ajout en cours...' : 'Ajouter la ressource'}
-            </Button>
-        </form>
-    );
+        )}
+    </form>
+);
 };
