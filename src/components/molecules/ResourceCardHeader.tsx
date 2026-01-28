@@ -9,7 +9,9 @@ interface ResourceCardHeaderProps {
 export const ResourceCardHeader = ({ title, category, tags = [] }: ResourceCardHeaderProps) => {
   return (
     <div className="space-y-3">
-      <h3 className="text-xl font-semibold text-gray-900 line-clamp-2">
+      <h3 className="text-xl font-bold text-white line-clamp-2
+                   [text-shadow:_2px_2px_0_rgb(0_0_0_/_40%)]
+                   group-hover:text-accent-neon transition-colors duration-300">
         {title}
       </h3>
       
