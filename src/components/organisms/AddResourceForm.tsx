@@ -6,7 +6,6 @@ import { RadioFieldList } from '../molecules/RadioFieldList';
 import { ReadMetadataFields } from '../molecules/ReadMetadataFields';
 import { ListenMetadataFields } from '../molecules/ListenMetadataFields';
 import { WatchMetadataFields } from '../molecules/WatchMetadataFields';
-import { Button } from '../atoms/Button';
 import type { SelectOption } from '../../types/FormTypes';
 import { AddResourceService, GetMediaService, GetCategoryService } from '../../services/Api';
 import type { CategoryData, MediaData, ResourceFormData, ResourceFormErrors, ResourcePayload } from '../../types/ResourceTypes';
@@ -323,156 +322,336 @@ const handleSubmit = async (e: React.FormEvent) => {
     }
 };
 
-
-   return (
-    <form onSubmit={handleSubmit} className="bg-surface-light p-8 rounded-card shadow-card">
-        <h2 className="text-3xl font-bold text-content-primary mb-6">
-            Ajouter une ressource
-        </h2>
-
-        {/* Section 1 : Choix du type de média */}
-        <div id="section-media" className="min-h-screen flex flex-col justify-center scroll-mt-8">
-            <RadioFieldList 
-                label='Cette ressource peut se :'
-                nameId='mediaId'
-                types={mediaOptions}
-                onChange={handleRadioChange}
-            />
+return (
+    <div className="min-h-screen bg-gradient-retro relative overflow-hidden">
+        {/* Pattern de fond pixel */}
+        <div className="absolute inset-0 bg-dots-pattern bg-dots opacity-10"></div>
+        
+        {/* Scanlines effet rétro */}
+        <div className="absolute inset-0 pointer-events-none" 
+             style={{
+                 background: 'repeating-linear-gradient(0deg, rgba(0,0,0,.15) 0px, transparent 1px, transparent 2px, rgba(0,0,0,.15) 3px)',
+                 opacity: 0.03
+             }}>
         </div>
 
-        {/* Section 2 : Choix de la catégorie */}
-        {formData.mediaId && (
-            <div id="section-category" className="min-h-screen flex flex-col justify-center scroll-mt-8">
-                <SelectField
-                    label='On pourrait la ranger dans la catégorie :'
-                    name='categoryId'
-                    value={formData.categoryId}
-                    onChange={handleSelectChange}
-                    options={categoryOptions}
-                    error={errors.categoryId}
-                    required
-                />
-            </div>
-        )}
-
-        {/* Section 3 : Détails de la ressource */}
-        {formData.categoryId && (
-            <div id="section-details" className="min-h-screen flex flex-col justify-center scroll-mt-8 space-y-6">
-                <FormField
-                    label="Titre de la ressource"
-                    name="title"
-                    type='text'
-                    value={formData.title}
-                    onChange={handleChange}
-                    error={errors.title}
-                    required
-                />
-
-                <FormField
-                    label="Description"
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    error={errors.description}
-                    required
-                    isTextarea={true}
-                    rows={5}
-                />
-
-                <FormField
-                    label="URL"
-                    name="url"
-                    type="url"
-                    value={formData.url}
-                    onChange={handleChange}
-                    error={errors.url}
-                    required
-                />
-                
-                <FormField
-                    label="Langue"
-                    name="language"
-                    type='text'
-                    value={formData.language}
-                    onChange={handleChange}
-                />
-
-                   <Button
-                    type="button"
-                    variant="action"
-                    className="w-full mt-6"
-                    disabled={isLoading}
-                    onClick={handleNextToMetadata}
-                >
-                    Suivant
-                </Button>
+        <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-8 relative z-10">
+            {/* Header pixel style */}
+            <div className="text-center mb-12">
+                <div className="inline-block mb-4 px-6 py-2 bg-accent-neon/20 border-2 border-accent-neon 
+                              rounded-pixel shadow-pixel-neon">
+                    <span className="text-accent-neon text-xs font-pixel tracking-wider">
+                        ★ NEW RESOURCE ★
+                    </span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-bold text-white mb-3 
+                             drop-shadow-[0_0_10px_rgba(139,92,246,0.7)]
+                             [text-shadow:_2px_2px_0_rgb(0_0_0_/_40%)]">
+                    Ajouter une ressource
+                </h2>
+                <p className="text-cyan-300 text-sm md:text-base">
+                    ▸ Partagez vos découvertes avec la communauté
+                </p>
             </div>
 
-        )}
-
-        {formData.title && formData.description && formData.url && (
-            <div id="section-metadata" className="min-h-screen flex flex-col justify-center scroll-mt-8">
-                {selectedMediaType === 'read' && (
-                    <div className="p-6 border border-surface-gray rounded-card bg-surface-light shadow-card">
-                        <h3 className="text-xl font-semibold text-content-primary mb-4">
-                            Informations spécifiques (Lecture)
-                        </h3>
-                        <ReadMetadataFields
-                            values={formData.readMetadata}
-                            onChange={handleSelectChange}
-                            errors={errors.readMetadata}
-                        />
-                    </div>
-                )}
-
-                {selectedMediaType === 'listen' && (
-                    <div className="p-6 border border-surface-gray rounded-card bg-surface-light shadow-card">
-                        <h3 className="text-xl font-semibold text-content-primary mb-4">
-                            Informations spécifiques (Audio)
-                        </h3>
-                        <ListenMetadataFields
-                            values={formData.listenMetadata}
-                            onChange={handleSelectChange}
-                            errors={errors.listenMetadata}
-                        />
-                    </div>
-                )}
-
-                {selectedMediaType === 'watch' && (
-                    <div className="p-6 border border-surface-gray rounded-card bg-surface-light shadow-card">
-                        <h3 className="text-xl font-semibold text-content-primary mb-4">
-                            Informations spécifiques (Vidéo)
-                        </h3>
-                        <WatchMetadataFields
-                            values={formData.watchMetadata}
-                            onChange={handleSelectChange}
-                            errors={errors.watchMetadata}
-                        />
-                    </div>
-                )}
-
-                {selectedMediaType === 'play' && (
-                    <div className="p-6 border border-surface-gray rounded-card bg-surface-light shadow-card">
-                        <h3 className="text-xl font-semibold text-content-primary mb-4">
-                            Informations spécifiques (Jeu)
-                        </h3>
-                        <PlayMetadataFields
-                            values={formData.playMetadata}
-                            onChange={handleSelectChange}
-                        />
-                    </div>
-                )}
-
-                <Button
-                    type="submit"
-                    variant="action"
-                    className="w-full mt-6"
-                    disabled={isLoading}
-                >
-                    {isLoading ? 'Ajout en cours...' : 'Ajouter la ressource'}
-                </Button>
+            {/* Section Media - OMBRES AUGMENTÉES */}
+            <div id="section-media" className="min-h-screen flex flex-col justify-center scroll-mt-8">
+                <div className="bg-retro-darker/90 backdrop-blur-sm p-8 
+                              border-4 border-indigo-400 rounded-pixel shadow-pixel-blue
+                              hover:shadow-[0_0_30px_rgba(99,102,241,0.8),10px_10px_0px_rgba(0,0,0,0.5)]
+                              transition-all duration-300
+                              relative overflow-hidden">
+                    {/* Coin décoratif pixel */}
+                    <div className="absolute top-0 right-0 w-8 h-8 bg-accent-neon"></div>
+                    <div className="absolute top-0 right-0 w-6 h-6 bg-retro-darker"></div>
+                    
+                    {/* Glow effect interne */}
+                    <div className="absolute inset-0 bg-indigo-500/5 pointer-events-none"></div>
+                    
+                    <RadioFieldList 
+                        label='Cette ressource peut se :'
+                        nameId='mediaId'
+                        types={mediaOptions}
+                        onChange={handleRadioChange}
+                    />
+                </div>
             </div>
-        )}
-    </form>
+
+            {/* Section Category - OMBRES AUGMENTÉES */}
+            {formData.mediaId && (
+                <div id="section-category" className="min-h-screen flex flex-col justify-center scroll-mt-8">
+                    <div className="bg-retro-darker/90 backdrop-blur-sm p-8 
+                                  border-4 border-cyan-400 rounded-pixel shadow-pixel-cyan
+                                  hover:shadow-[0_0_30px_rgba(6,182,212,0.8),10px_10px_0px_rgba(0,0,0,0.5)]
+                                  transition-all duration-300
+                                  relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-8 h-8 bg-cyan-400"></div>
+                        <div className="absolute top-0 left-0 w-6 h-6 bg-retro-darker"></div>
+                        
+                        {/* Glow effect interne */}
+                        <div className="absolute inset-0 bg-cyan-500/5 pointer-events-none"></div>
+                        
+                        <SelectField
+                            label='On pourrait la ranger dans la catégorie :'
+                            name='categoryId'
+                            value={formData.categoryId}
+                            onChange={handleSelectChange}
+                            options={categoryOptions}
+                            error={errors.categoryId}
+                            required
+                        />
+                    </div>
+                </div>
+            )}
+
+            {/* Section Details - OMBRES AUGMENTÉES */}
+            {formData.categoryId && (
+                <div id="section-details" className="min-h-screen flex flex-col justify-center scroll-mt-8">
+                    <div className="bg-retro-darker/90 backdrop-blur-sm p-8 
+                                  border-4 border-violet-400 rounded-pixel shadow-pixel-violet
+                                  hover:shadow-[0_0_30px_rgba(139,92,246,0.8),10px_10px_0px_rgba(0,0,0,0.5)]
+                                  transition-all duration-300
+                                  relative overflow-hidden space-y-6">
+                        <div className="absolute bottom-0 right-0 w-8 h-8 bg-violet-400"></div>
+                        <div className="absolute bottom-0 right-0 w-6 h-6 bg-retro-darker"></div>
+                        
+                        {/* Glow effect interne */}
+                        <div className="absolute inset-0 bg-violet-500/5 pointer-events-none"></div>
+                        
+                        <div className="mb-6 flex items-center gap-3 relative z-10">
+                            <div className="w-2 h-2 bg-accent-neon animate-pulse"></div>
+                            <h3 className="text-2xl font-semibold text-white">
+                                Détails de la ressource
+                            </h3>
+                            <div className="flex-1 h-1 bg-gradient-to-r from-violet-400 to-transparent"></div>
+                        </div>
+
+                        <div className="relative z-10">
+                            <FormField
+                                label="Titre de la ressource"
+                                name="title"
+                                type='text'
+                                value={formData.title}
+                                onChange={handleChange}
+                                error={errors.title}
+                                required
+                            />
+
+                            <FormField
+                                label="Description"
+                                name="description"
+                                value={formData.description}
+                                onChange={handleChange}
+                                error={errors.description}
+                                required
+                                isTextarea={true}
+                                rows={5}
+                            />
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <FormField
+                                    label="URL"
+                                    name="url"
+                                    type="url"
+                                    value={formData.url}
+                                    onChange={handleChange}
+                                    error={errors.url}
+                                    required
+                                />
+                                
+                                <FormField
+                                    label="Langue"
+                                    name="language"
+                                    type='text'
+                                    value={formData.language}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={handleNextToMetadata}
+                            disabled={isLoading}
+                            className="w-full mt-6 px-8 py-4 relative z-10
+                                     bg-gradient-to-r from-indigo-500 to-violet-500
+                                     border-4 border-white/30 rounded-pixel
+                                     shadow-pixel-lg hover:shadow-[12px_12px_0px_rgba(0,0,0,0.6)]
+                                     text-white font-bold text-lg
+                                     transform transition-all duration-200
+                                     hover:translate-x-1 hover:translate-y-1
+                                     active:translate-x-2 active:translate-y-2
+                                     active:shadow-pixel
+                                     disabled:opacity-50 disabled:cursor-not-allowed
+                                     relative overflow-hidden group">
+                            <span className="relative z-10 flex items-center justify-center gap-2">
+                                SUIVANT ▶
+                            </span>
+                            <div className="absolute inset-0 bg-white/10 translate-x-full 
+                                          group-hover:translate-x-0 transition-transform duration-300"></div>
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Section Metadata - OMBRES AUGMENTÉES */}
+            {formData.title && formData.description && formData.url && (
+                <div id="section-metadata" className="min-h-screen flex flex-col justify-center scroll-mt-8">
+                    {selectedMediaType === 'read' && (
+                        <div className="bg-retro-darker/90 backdrop-blur-sm p-8 
+                                      border-4 border-indigo-400 rounded-pixel shadow-pixel-blue
+                                      hover:shadow-[0_0_30px_rgba(99,102,241,0.8),10px_10px_0px_rgba(0,0,0,0.5)]
+                                      transition-all duration-300
+                                      border-l-8 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-indigo-500/5 pointer-events-none"></div>
+                            
+                            <div className="flex items-center gap-4 mb-6 relative z-10">
+                                <div className="w-14 h-14 bg-indigo-400 border-4 border-white/30 
+                                              flex items-center justify-center text-3xl
+                                              shadow-pixel">
+                                    📖
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-bold text-white">
+                                        INFORMATIONS LECTURE
+                                    </h3>
+                                    <div className="h-1 w-full bg-indigo-400 mt-1"></div>
+                                </div>
+                            </div>
+                            <div className="relative z-10">
+                                <ReadMetadataFields
+                                    values={formData.readMetadata}
+                                    onChange={handleSelectChange}
+                                    errors={errors.readMetadata}
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    {selectedMediaType === 'listen' && (
+                        <div className="bg-retro-darker/90 backdrop-blur-sm p-8 
+                                      border-4 border-cyan-400 rounded-pixel shadow-pixel-cyan
+                                      hover:shadow-[0_0_30px_rgba(6,182,212,0.8),10px_10px_0px_rgba(0,0,0,0.5)]
+                                      transition-all duration-300
+                                      border-l-8 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-cyan-500/5 pointer-events-none"></div>
+                            
+                            <div className="flex items-center gap-4 mb-6 relative z-10">
+                                <div className="w-14 h-14 bg-cyan-400 border-4 border-white/30 
+                                              flex items-center justify-center text-3xl
+                                              shadow-pixel">
+                                    🎧
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-bold text-white">
+                                        INFORMATIONS AUDIO
+                                    </h3>
+                                    <div className="h-1 w-full bg-cyan-400 mt-1"></div>
+                                </div>
+                            </div>
+                            <div className="relative z-10">
+                                <ListenMetadataFields
+                                    values={formData.listenMetadata}
+                                    onChange={handleSelectChange}
+                                    errors={errors.listenMetadata}
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    {selectedMediaType === 'watch' && (
+                        <div className="bg-retro-darker/90 backdrop-blur-sm p-8 
+                                      border-4 border-blue-400 rounded-pixel shadow-[0_0_20px_rgba(59,130,246,0.7),8px_8px_0px_rgba(0,0,0,0.4)]
+                                      hover:shadow-[0_0_30px_rgba(59,130,246,0.8),10px_10px_0px_rgba(0,0,0,0.5)]
+                                      transition-all duration-300
+                                      border-l-8 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-blue-500/5 pointer-events-none"></div>
+                            
+                            <div className="flex items-center gap-4 mb-6 relative z-10">
+                                <div className="w-14 h-14 bg-blue-400 border-4 border-white/30 
+                                              flex items-center justify-center text-3xl
+                                              shadow-pixel">
+                                    🎬
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-bold text-white">
+                                        INFORMATIONS VIDÉO
+                                    </h3>
+                                    <div className="h-1 w-full bg-blue-400 mt-1"></div>
+                                </div>
+                            </div>
+                            <div className="relative z-10">
+                                <WatchMetadataFields
+                                    values={formData.watchMetadata}
+                                    onChange={handleSelectChange}
+                                    errors={errors.watchMetadata}
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    {selectedMediaType === 'play' && (
+                        <div className="bg-retro-darker/90 backdrop-blur-sm p-8 
+                                      border-4 border-violet-400 rounded-pixel shadow-pixel-violet
+                                      hover:shadow-[0_0_30px_rgba(139,92,246,0.8),10px_10px_0px_rgba(0,0,0,0.5)]
+                                      transition-all duration-300
+                                      border-l-8 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-violet-500/5 pointer-events-none"></div>
+                            
+                            <div className="flex items-center gap-4 mb-6 relative z-10">
+                                <div className="w-14 h-14 bg-violet-400 border-4 border-white/30 
+                                              flex items-center justify-center text-3xl
+                                              shadow-pixel">
+                                    🎮
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-bold text-white">
+                                        INFORMATIONS JEU
+                                    </h3>
+                                    <div className="h-1 w-full bg-violet-400 mt-1"></div>
+                                </div>
+                            </div>
+                            <div className="relative z-10">
+                                <PlayMetadataFields
+                                    values={formData.playMetadata}
+                                    onChange={handleSelectChange}
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    <button
+                        type="submit"
+                        disabled={isLoading}
+                        className="w-full mt-8 px-8 py-5
+                                 bg-accent-neon text-retro-darker
+                                 border-4 border-white/30 rounded-pixel
+                                 shadow-pixel-neon hover:shadow-[0_0_30px_rgba(0,255,136,1),12px_12px_0px_rgba(0,0,0,0.5)]
+                                 font-bold text-xl uppercase
+                                 transform transition-all duration-200
+                                 hover:translate-x-1 hover:translate-y-1
+                                 active:translate-x-2 active:translate-y-2
+                                 active:shadow-pixel
+                                 disabled:opacity-50 disabled:cursor-not-allowed
+                                 relative overflow-hidden group
+                                 animate-pulse">
+                        {isLoading ? (
+                            <span className="flex items-center justify-center gap-3">
+                                <span className="inline-block w-4 h-4 border-2 border-retro-darker 
+                                               border-t-transparent rounded-full animate-spin"></span>
+                                CHARGEMENT...
+                            </span>
+                        ) : (
+                            <span className="flex items-center justify-center gap-3">
+                                ★ AJOUTER LA RESSOURCE ★
+                            </span>
+                        )}
+                        <div className="absolute inset-0 bg-white/20 translate-y-full 
+                                      group-hover:translate-y-0 transition-transform duration-300"></div>
+                    </button>
+                </div>
+            )}
+        </form>
+    </div>
 );
 };
