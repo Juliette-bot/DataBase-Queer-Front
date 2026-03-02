@@ -1,13 +1,14 @@
 import type React from "react";
 
 
-interface RadioProps extends React.FC<RadioProps> {
+interface RadioProps {
 
-    hasErrr?: boolean;
+    hasError?: boolean;
 
 }
 
 export const Radio: React.FC<RadioProps> = ({
     hasError = false,
-    
-})
+}) => {
+    return <input type="radio" aria-invalid={hasError} />;
+}
