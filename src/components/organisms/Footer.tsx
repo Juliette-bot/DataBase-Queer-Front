@@ -56,9 +56,9 @@ export const Footer: React.FC = () => {
               <li>
                 <a 
                   href="/resource" 
-                  className="text-cyan-200 hover:text-accent-neon transition-colors
+                  className="text-cyan-200 hover:text-accent-neon
                            flex items-center gap-2 group
-                           hover:translate-x-1 transition-transform duration-200"
+                           hover:translate-x-1 transition-all duration-200"
                 >
                   <span className="w-2 h-2 bg-indigo-400 group-hover:bg-accent-neon 
                                  transition-colors"></span>
@@ -68,9 +68,9 @@ export const Footer: React.FC = () => {
               <li>
                 <a 
                   href="/share" 
-                  className="text-cyan-200 hover:text-accent-neon transition-colors
+                  className="text-cyan-200 hover:text-accent-neon
                            flex items-center gap-2 group
-                           hover:translate-x-1 transition-transform duration-200"
+                           hover:translate-x-1 transition-all duration-200"
                 >
                   <span className="w-2 h-2 bg-indigo-400 group-hover:bg-accent-neon 
                                  transition-colors"></span>
@@ -80,9 +80,9 @@ export const Footer: React.FC = () => {
               <li>
                 <a 
                   href="/about" 
-                  className="text-cyan-200 hover:text-accent-neon transition-colors
+                  className="text-cyan-200 hover:text-accent-neon
                            flex items-center gap-2 group
-                           hover:translate-x-1 transition-transform duration-200"
+                           hover:translate-x-1 transition-all duration-200"
                 >
                   <span className="w-2 h-2 bg-indigo-400 group-hover:bg-accent-neon 
                                  transition-colors"></span>
@@ -92,9 +92,9 @@ export const Footer: React.FC = () => {
               <li>
                 <a 
                   href="/contact" 
-                  className="text-cyan-200 hover:text-accent-neon transition-colors
+                  className="text-cyan-200 hover:text-accent-neon
                            flex items-center gap-2 group
-                           hover:translate-x-1 transition-transform duration-200"
+                           hover:translate-x-1 transition-all duration-200"
                 >
                   <span className="w-2 h-2 bg-indigo-400 group-hover:bg-accent-neon 
                                  transition-colors"></span>
@@ -115,9 +115,9 @@ export const Footer: React.FC = () => {
               <li>
                 <a 
                   href="/privacy" 
-                  className="text-cyan-200 hover:text-accent-neon transition-colors
+                  className="text-cyan-200 hover:text-accent-neon
                            flex items-center gap-2 group
-                           hover:translate-x-1 transition-transform duration-200"
+                           hover:translate-x-1 transition-all duration-200"
                 >
                   <span className="w-2 h-2 bg-violet-400 group-hover:bg-accent-neon 
                                  transition-colors"></span>
@@ -127,9 +127,9 @@ export const Footer: React.FC = () => {
               <li>
                 <a 
                   href="/terms" 
-                  className="text-cyan-200 hover:text-accent-neon transition-colors
+                  className="text-cyan-200 hover:text-accent-neon
                            flex items-center gap-2 group
-                           hover:translate-x-1 transition-transform duration-200"
+                           hover:translate-x-1 transition-all duration-200"
                 >
                   <span className="w-2 h-2 bg-violet-400 group-hover:bg-accent-neon 
                                  transition-colors"></span>
@@ -139,9 +139,9 @@ export const Footer: React.FC = () => {
               <li>
                 <a 
                   href="/guidelines" 
-                  className="text-cyan-200 hover:text-accent-neon transition-colors
+                  className="text-cyan-200 hover:text-accent-neon
                            flex items-center gap-2 group
-                           hover:translate-x-1 transition-transform duration-200"
+                           hover:translate-x-1 transition-all duration-200"
                 >
                   <span className="w-2 h-2 bg-violet-400 group-hover:bg-accent-neon 
                                  transition-colors"></span>

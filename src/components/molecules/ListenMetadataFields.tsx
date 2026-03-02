@@ -7,7 +7,7 @@ interface ListenMetadataFieldsProps {
     platform: string;
     episodeNumber: string;
   };
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   errors?: {
     creator?: string;
     duration?: string;

@@ -477,8 +477,7 @@ return (
                             <span className="relative z-10 flex items-center justify-center gap-2">
                                 SUIVANT ▶
                             </span>
-                            <div className="absolute inset-0 bg-white/10 translate-x-full 
-                                          group-hover:translate-x-0 transition-transform duration-300"></div>
+                            <div className="absolute inset-0 bg-white/10 translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
                         </button>
                     </div>
                 </div>
