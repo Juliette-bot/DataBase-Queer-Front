@@ -1,7 +1,5 @@
-// src/services/api.ts
-const API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
-// token avec services 4
 export const tokenService = {
   getToken: (): string | null => { //recup
     return localStorage.getItem('authToken');

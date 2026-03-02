@@ -1,7 +1,7 @@
 import type { ResourcePayload } from "../types/ResourceTypes";
 import { fetchWithAuth } from "./AuthApi";
 
-const API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 
 
