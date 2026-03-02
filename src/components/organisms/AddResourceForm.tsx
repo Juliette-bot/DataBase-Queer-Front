@@ -324,10 +324,8 @@ const handleSubmit = async (e: React.FormEvent) => {
 
 return (
     <div className="min-h-screen bg-gradient-retro relative overflow-hidden">
-        {/* Pattern de fond pixel */}
         <div className="absolute inset-0 bg-dots-pattern bg-dots opacity-10"></div>
         
-        {/* Scanlines effet rétro */}
         <div className="absolute inset-0 pointer-events-none" 
              style={{
                  background: 'repeating-linear-gradient(0deg, rgba(0,0,0,.15) 0px, transparent 1px, transparent 2px, rgba(0,0,0,.15) 3px)',
@@ -336,7 +334,6 @@ return (
         </div>
 
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-8 relative z-10">
-            {/* Header pixel style */}
             <div className="text-center mb-12">
                 <div className="inline-block mb-4 px-6 py-2 bg-accent-neon/20 border-2 border-accent-neon 
                               rounded-pixel shadow-pixel-neon">
@@ -354,18 +351,15 @@ return (
                 </p>
             </div>
 
-            {/* Section Media - OMBRES AUGMENTÉES */}
             <div id="section-media" className="min-h-screen flex flex-col justify-center scroll-mt-8">
                 <div className="bg-retro-darker/90 backdrop-blur-sm p-8 
                               border-4 border-indigo-400 rounded-pixel shadow-pixel-blue
                               hover:shadow-[0_0_30px_rgba(99,102,241,0.8),10px_10px_0px_rgba(0,0,0,0.5)]
                               transition-all duration-300
                               relative overflow-hidden">
-                    {/* Coin décoratif pixel */}
                     <div className="absolute top-0 right-0 w-8 h-8 bg-accent-neon"></div>
                     <div className="absolute top-0 right-0 w-6 h-6 bg-retro-darker"></div>
                     
-                    {/* Glow effect interne */}
                     <div className="absolute inset-0 bg-indigo-500/5 pointer-events-none"></div>
                     
                     <RadioFieldList 
@@ -377,7 +371,6 @@ return (
                 </div>
             </div>
 
-            {/* Section Category - OMBRES AUGMENTÉES */}
             {formData.mediaId && (
                 <div id="section-category" className="min-h-screen flex flex-col justify-center scroll-mt-8">
                     <div className="bg-retro-darker/90 backdrop-blur-sm p-8 
@@ -388,7 +381,6 @@ return (
                         <div className="absolute top-0 left-0 w-8 h-8 bg-cyan-400"></div>
                         <div className="absolute top-0 left-0 w-6 h-6 bg-retro-darker"></div>
                         
-                        {/* Glow effect interne */}
                         <div className="absolute inset-0 bg-cyan-500/5 pointer-events-none"></div>
                         
                         <SelectField
@@ -404,7 +396,6 @@ return (
                 </div>
             )}
 
-            {/* Section Details - OMBRES AUGMENTÉES */}
             {formData.categoryId && (
                 <div id="section-details" className="min-h-screen flex flex-col justify-center scroll-mt-8">
                     <div className="bg-retro-darker/90 backdrop-blur-sm p-8 
@@ -415,7 +406,6 @@ return (
                         <div className="absolute bottom-0 right-0 w-8 h-8 bg-violet-400"></div>
                         <div className="absolute bottom-0 right-0 w-6 h-6 bg-retro-darker"></div>
                         
-                        {/* Glow effect interne */}
                         <div className="absolute inset-0 bg-violet-500/5 pointer-events-none"></div>
                         
                         <div className="mb-6 flex items-center gap-3 relative z-10">
@@ -494,7 +484,6 @@ return (
                 </div>
             )}
 
-            {/* Section Metadata - OMBRES AUGMENTÉES */}
             {formData.title && formData.description && formData.url && (
                 <div id="section-metadata" className="min-h-screen flex flex-col justify-center scroll-mt-8">
                     {selectedMediaType === 'read' && (

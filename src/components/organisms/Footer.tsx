@@ -6,23 +6,18 @@ export const Footer: React.FC = () => {
 
   return (
     <footer className="bg-retro-darker border-t-4 border-violet-400 relative mt-auto overflow-hidden">
-      {/* Pattern de fond */}
       <div className="absolute inset-0 bg-dots-pattern bg-dots opacity-5"></div>
       
-      {/* Glow effect */}
       <div className="absolute inset-0 bg-gradient-to-b from-violet-500/10 to-transparent pointer-events-none"></div>
       
-      {/* Barre décorative du haut */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r 
                     from-indigo-500 via-violet-500 to-cyan-500 opacity-70"></div>
       
-      {/* Pixels décoratifs */}
       <div className="absolute top-0 left-8 w-4 h-4 bg-accent-neon"></div>
       <div className="absolute top-0 right-8 w-4 h-4 bg-cyan-400"></div>
 
       <div className="container mx-auto px-4 py-12 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* About Section */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-gradient-to-br from-violet-500 to-indigo-500 
@@ -51,7 +46,6 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
           <div>
             <h3 className="text-lg font-bold mb-4 text-white 
                          border-b-2 border-indigo-400 pb-2 inline-block
@@ -158,10 +152,8 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
         <div className="border-t-2 border-white/10 mt-8 pt-8 
                       flex flex-col md:flex-row justify-between items-center gap-4">
-          {/* Copyright avec style pixel */}
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 bg-violet-500 border-2 border-white/20 rounded-pixel
                           flex items-center justify-center text-xs">
@@ -172,9 +164,7 @@ export const Footer: React.FC = () => {
             </p>
           </div>
           
-          {/* Social Links - Réseaux éthiques et safe */}
           <div className="flex gap-3">
-            {/* Mastodon */}
             <a 
               href="https://mastodon.social/@outtogether" 
               target="_blank"
@@ -198,7 +188,6 @@ export const Footer: React.FC = () => {
               </svg>
             </a>
 
-            {/* Bluesky */}
             <a 
               href="https://bsky.app/profile/outtogether.bsky.social" 
               target="_blank"
@@ -222,7 +211,6 @@ export const Footer: React.FC = () => {
               </svg>
             </a>
 
-            {/* PeerTube / Fediverse Video */}
             <a 
               href="https://framatube.org/c/outtogether" 
               target="_blank"
@@ -246,7 +234,6 @@ export const Footer: React.FC = () => {
               </svg>
             </a>
 
-            {/* Matrix / Element */}
             <a 
               href="https://matrix.to/#/#outtogether:matrix.org" 
               target="_blank"
@@ -272,7 +259,6 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Easter egg - Message pixel style */}
         <div className="mt-6 text-center">
           <p className="text-cyan-300/50 text-xs font-mono">
             ▸ PRESS START TO CONTINUE ▸
@@ -280,7 +266,6 @@ export const Footer: React.FC = () => {
         </div>
       </div>
 
-      {/* Pixels décoratifs du bas */}
       <div className="absolute bottom-0 left-8 w-4 h-4 bg-indigo-400"></div>
       <div className="absolute bottom-0 right-8 w-4 h-4 bg-accent-neon"></div>
     </footer>
@@ -289,5 +274,3 @@ export const Footer: React.FC = () => {
 
 
 
-
-/*atomic desgine dev par brad callback fonction, comment fonctionne comment ? moteur de rendu, variable change relance le rendu, lle use effect fonctionne comme ca, je suis encore entrain de decouvirr tout j'ai pue apprendre ca et je suis encore entrain de decouvir poleins dautre truc bien expliquer les principe de java l'expliquer popur que les personnes comprenne globalement ce que je dis. posseder le max que je connais, si zone d'ombre je le dis tout de suite en mode je suis entrain de travailler, ne pas trop rentrer dans le detail pour pas perdre tout le monde. presenter  et guider les gens "montrer " portes" "celle la fait ca puis elle fais ca et elle ca. eviter trop d'aller retour. faire entonoir poser les chose. les gens ne doivent pas decrocher, slide permet juste d'appuyer mon propo et pas trop de truc ca peux etre des truc rigolo, raconter la "passion" humanise le truc plutot un truc visuel que pleins de mots +++                                                       */
