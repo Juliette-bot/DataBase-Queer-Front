@@ -45,12 +45,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-retro flex items-center justify-center p-4">
-      {/* Decorative pixel grid background */}
-      <div className="absolute inset-0 opacity-5"
-        style={{ backgroundImage: 'radial-gradient(circle, #6366f1 1px, transparent 1px)', backgroundSize: '20px 20px' }}
-      />
-
       <div className="relative w-full max-w-md">
         {/* Pixel corner decorations */}
         <div className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-accent-neon" />
@@ -101,6 +95,5 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
           </Button>
         </form>
       </div>
-    </div>
   );
 };
