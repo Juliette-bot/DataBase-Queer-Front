@@ -78,13 +78,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-retro flex items-center justify-center p-4">
-      {/* Pixel grid background */}
-      <div className="absolute inset-0 opacity-5"
-        style={{ backgroundImage: 'radial-gradient(circle, #6366f1 1px, transparent 1px)', backgroundSize: '20px 20px' }}
-      />
-
-      <div className="relative w-full max-w-md">
+         <div className="relative w-full max-w-md">
         {/* Pixel corner decorations */}
         <div className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-accent-pink" />
         <div className="absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-accent-pink" />
@@ -165,6 +159,5 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
           </Button>
         </form>
       </div>
-    </div>
   );
 };
